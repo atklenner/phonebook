@@ -22,16 +22,19 @@ const App = () => {
     setFilter(e.target.value.toLowerCase());
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (persons.find((person) => person.name === newName)) {
       alert(`${newName} is already added to phonebook`);
     } else {
-      setPersons((prevPersons) => {
-        return [...prevPersons, { name: newName, number: newNumber }];
+      let newPerson = { name: newName, number: newNumber };
+      axios.post("http://localhost:3001/persons", newPerson).then((res) => {
+        setPersons((prevPersons) => {
+          return [...prevPersons, res.data];
+        });
+        setNewName("");
+        setNewNumber("");
       });
-      setNewName("");
-      setNewNumber("");
     }
   }
 
