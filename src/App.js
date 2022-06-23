@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-// import axios from "axios";
 import personService from "./services/persons";
 
 const App = () => {
@@ -23,10 +22,29 @@ const App = () => {
     setFilter(e.target.value.toLowerCase());
   }
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    if (persons.find((person) => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
+    let existingPerson = persons.find((person) => person.name === newName);
+    if (existingPerson) {
+      if (
+        window.confirm(
+          `${existingPerson.name} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        personService
+          .update(existingPerson.id, {
+            ...existingPerson,
+            number: newNumber,
+          })
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id === returnedPerson.id ? returnedPerson : person
+              )
+            );
+          });
+        // console.log("this still works");
+      }
     } else {
       let newPerson = { name: newName, number: newNumber };
       personService.create(newPerson).then((res) => {
@@ -37,6 +55,17 @@ const App = () => {
         setNewNumber("");
       });
     }
+  }
+
+  function deletePersonHandler(id) {
+    if (
+      window.confirm(
+        `Delete ${persons.find((person) => person.id === id).name}?`
+      )
+    )
+      personService
+        .deletePerson(id)
+        .then(() => setPersons(persons.filter((person) => person.id !== id)));
   }
 
   const peopleToShow = filter
@@ -60,7 +89,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={peopleToShow} />
+      <Persons persons={peopleToShow} deletePerson={deletePersonHandler} />
     </div>
   );
 };
