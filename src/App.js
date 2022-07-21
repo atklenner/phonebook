@@ -43,7 +43,6 @@ const App = () => {
               )
             );
           });
-        // console.log("this still works");
       }
     } else {
       let newPerson = { name: newName, number: newNumber };
