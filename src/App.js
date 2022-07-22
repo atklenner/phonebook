@@ -32,14 +32,14 @@ const App = () => {
         )
       ) {
         personService
-          .update(existingPerson.id, {
+          .update(existingPerson._id, {
             ...existingPerson,
             number: newNumber,
           })
           .then((returnedPerson) => {
             setPersons(
               persons.map((person) =>
-                person.id === returnedPerson.id ? returnedPerson : person
+                person._id === returnedPerson._id ? returnedPerson : person
               )
             );
           });
