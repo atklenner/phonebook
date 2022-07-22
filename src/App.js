@@ -59,12 +59,12 @@ const App = () => {
   function deletePersonHandler(id) {
     if (
       window.confirm(
-        `Delete ${persons.find((person) => person.id === id).name}?`
+        `Delete ${persons.find((person) => person._id === id).name}?`
       )
     )
       personService
         .deletePerson(id)
-        .then(() => setPersons(persons.filter((person) => person.id !== id)));
+        .then(() => setPersons(persons.filter((person) => person._id !== id)));
   }
 
   const peopleToShow = filter

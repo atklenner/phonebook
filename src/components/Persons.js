@@ -3,9 +3,9 @@ export default function Persons({ persons, deletePerson }) {
     <ul>
       {persons.map((person) => {
         return (
-          <li key={person.name}>
+          <li key={person._id}>
             {person.name} {person.number}
-            <button onClick={() => deletePerson(person.id)}>delete</button>
+            <button onClick={() => deletePerson(person._id)}>delete</button>
           </li>
         );
       })}
